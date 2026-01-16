@@ -28,18 +28,19 @@ pipeline {
             }
         }
         stage ('User acceptance') {
+            input {
+                message "Proceed to push to main"
+                ok "Yes"
+            }
             steps {
-                input{
-                    message "Proceed to push to main"
-                    ok "Yes"
-                }
+                echo "User accepted"
             }
         }
         stage ('Pushing and Merging') {
             parallel {
                 stage ('Pushing') {
                     environment {
-                        DOCKERHUB_CREDENTIALS = credentials($DOCKER_ID)
+                        DOCKERHUB_CREDENTIALS = credentials('nathiaravril')
                     }
                     steps {
                         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
